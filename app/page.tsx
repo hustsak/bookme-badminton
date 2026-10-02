@@ -174,7 +174,7 @@ export default function ExplorePage() {
   }, [search, location, maxPrice, sort, availableOnly]);
 
   return (
-    <main className="min-h-screen bg-[#f7f8f4] text-[#17201c] overflow-x-hidden pb-24 sm:pb-8">
+    <main className="min-h-screen bg-[#f7f8f4] text-[#17201c] overflow-x-hidden pb-36 sm:pb-8">
       <Navbar />
       <LoginModal />
 
@@ -381,8 +381,8 @@ export default function ExplorePage() {
               </div>
             </div>
 
-            {/* Stepping Badminton Shoe Court Animation */}
-            <div className="mt-3 w-full">
+            {/* Stepping Badminton Shoe Court Animation (Desktop Only) */}
+            <div className="hidden sm:block mt-3 w-full">
               <ShoeStepAnimation />
             </div>
           </motion.div>
@@ -429,7 +429,10 @@ export default function ExplorePage() {
                 whileTap={{ scale: 0.98 }}
                 className="group overflow-hidden rounded-[24px] sm:rounded-[26px] border border-[#e0e6de] bg-white shadow-[0_4px_24px_rgba(35,55,35,.04)] transition-all hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(35,55,35,.09)]"
               >
-                <div className="relative overflow-hidden aspect-[16/10] sm:aspect-auto sm:h-52 w-full">
+                <Link
+                  href={`/courts/${court.id}?date=${selectedDate}`}
+                  className="block relative overflow-hidden aspect-[16/10] sm:aspect-auto sm:h-52 w-full"
+                >
                   <img
                     src={court.image}
                     alt={court.name}
@@ -449,19 +452,6 @@ export default function ExplorePage() {
                     {court.available ? "Available Now" : "Fully Booked"}
                   </div>
 
-                  <motion.button
-                    whileTap={{ scale: 0.8 }}
-                    onClick={() => toggleFavorite(court.id)}
-                    aria-label="Toggle favorite"
-                    className="absolute right-3 top-3 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-white/95 shadow-sm backdrop-blur-md transition-transform hover:scale-110 active:scale-90"
-                  >
-                    <Heart
-                      className={`h-4 w-4 transition-colors ${
-                        isFav ? "fill-[#ed7181] text-[#ed7181]" : "text-[#69746c]"
-                      }`}
-                    />
-                  </motion.button>
-
                   {/* Bottom Tags on Image */}
                   <div className="absolute bottom-3 left-3 flex gap-1.5">
                     {court.tags.slice(0, 2).map((tag) => (
@@ -478,23 +468,39 @@ export default function ExplorePage() {
                   <div className="absolute bottom-3 right-3 rounded-full bg-[#17201c]/90 border border-white/20 px-2.5 py-1 text-[11px] font-black text-[#a8e63d] backdrop-blur-md">
                     ${court.price}<span className="text-[9px] font-normal text-white/80">/hr</span>
                   </div>
-                </div>
+                </Link>
 
                 <div className="p-4 sm:p-5">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="text-base font-bold text-[#17201c] group-hover:text-[#456e17] transition-colors">
-                        {court.name}
-                      </h3>
+                      <Link href={`/courts/${court.id}?date=${selectedDate}`}>
+                        <h3 className="text-base font-bold text-[#17201c] hover:text-[#456e17] transition-colors">
+                          {court.name}
+                        </h3>
+                      </Link>
                       <p className="mt-1 flex items-center gap-1 text-xs text-[#8a948d]">
                         <MapPin className="h-3.5 w-3.5 text-[#78a72b] shrink-0" />
                         <span>{court.location}</span>
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-1 rounded-xl bg-[#fff8e8] px-2 py-1 text-xs font-black text-[#8f6600] border border-[#f5e3b5]">
-                      <Star className="h-3.5 w-3.5 fill-[#f2bd48] text-[#f2bd48]" />
-                      <span>{court.rating}</span>
+                    <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1 rounded-xl bg-[#fff8e8] px-2 py-1 text-xs font-black text-[#8f6600] border border-[#f5e3b5]">
+                        <Star className="h-3.5 w-3.5 fill-[#f2bd48] text-[#f2bd48]" />
+                        <span>{court.rating}</span>
+                      </div>
+                      <motion.button
+                        whileTap={{ scale: 0.8 }}
+                        onClick={() => toggleFavorite(court.id)}
+                        aria-label="Toggle favorite"
+                        className="flex h-7 w-7 items-center justify-center rounded-xl bg-[#f5f7f3] border border-[#e1e7df] text-[#69746c] active:scale-90"
+                      >
+                        <Heart
+                          className={`h-3.5 w-3.5 transition-colors ${
+                            isFav ? "fill-[#ed7181] text-[#ed7181]" : "text-[#69746c]"
+                          }`}
+                        />
+                      </motion.button>
                     </div>
                   </div>
 
